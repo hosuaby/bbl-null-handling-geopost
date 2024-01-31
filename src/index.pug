@@ -15,56 +15,102 @@ html
         h1 Null handling in Java (Geopost)
 
       section
-        h2 Images
-        img(src="images/bespoke-logo.jpg")
+        h1 "Billion dollars mistake"
+        h3 Tony Hoare
 
       section
-        h2 Keyboard Interaction
-        h3 Powered by <a href="https://github.com/bespokejs/bespoke-keys">bespoke-keys</a>
-
+        p Make code prone to <em>NullPointerException</em>s <strong>by design</strong>.
+        
       section
-        h2 Touch Interaction
-        h3 Powered by <a href="https://github.com/bespokejs/bespoke-touch">bespoke-touch</a>
-
-      section
-        h2 Responsive Slides
-        h3 Powered by <a href="https://github.com/bespokejs/bespoke-scale">bespoke-scale</a>
-
-      section
-        h2 Bullet List
-        h3 Powered by <a href="https://github.com/bespokejs/bespoke-bullets">bespoke-bullets</a>
+        h1 Two rules:
         ul.build.build-items
-          li Bullet 1
-          li Bullet 2
-          li Bullet 3
+          li <strong>Do not pass null</strong>
+          li <strong>Do not return null</strong>
 
       section
-        h2 Syntax Highlighting
-        h3 Powered by <a href="https://twitter.com/LeaVerou">Lea Verou</a>'s <a href="https://github.com/PrismJS/prism">Prism</a>
+        h1 Collections
+
+      section
+        h1 Collections
+        p Collections should <strong>never</strong> be <em>null</em>!
         pre
-          code.language-javascript.
-            function hanoi (n, a, b, c) {
-              return n ? hanoi(n - 1, a, c, b)
-                  .concat([[a, b]])
-                  .concat(hanoi(n - 1, c, b, a)) : []
-            }
-            console.log(hanoi(3, 'left', 'right', 'mid')
-              .map((d) => `${d[0]} -&gt; ${d[1]}`))
-
-      section(data-bespoke-hash='named-route')
-        h2 Named Route
-        h3 Powered by <a href="https://github.com/bespokejs/bespoke-hash">bespoke-hash</a>
-        p Look up! This route has been named with a <em>data-bespoke-hash</em> attribute.
+          code.language-java.
+            List< Object > myList = Collections.emptyList();
+            Set< Object > mySet = Collections.emptySet();
+            Map< Object, Object > myMap = Collections.emptyMap();
+            
       section
-        h2.bullet Just the beginning…
+        h1 Collections in entities
+        p Use <strong>@Builder.Default</strong> of Lombok
+        pre
+          code.language-java.
+            @Builder
+            public class ParcelShopRestrictions {
+            
+              @Builder.Default
+              private Set< String > blacklistedParcelShopIds = Collections.emptySet();
+            
+              @Builder.Default
+              private Set< Integer > blacklistedPudoTypes = Collections.emptySet();
+            
+              @Builder.Default
+              private Set< String > blacklistedPudoServices = Collections.emptySet();
+            }
+
+      section
+        h1 Optional
+
+      section
+        h1 Rules of using Optionals
         ul.build.build-items
-          li Edit <a href="https://pugjs.org">Pug (formerly Jade)</a> markup in <em class="path">src/index.pug</em>
-          li Edit <a href="https://stylus-lang.com">Stylus</a> styles in <em class="path">src/styles/user.styl</em>
-          li Edit JavaScript in <em class="path">src/scripts/main.js</em>
-        br
-        ul.build
-          li
-            strong Enjoy! :)
-            a(href='https://twitter.com/markdalgleish')  -@markdalgleish
+          li Always return <strong>Optional</strong> from the methods that may return no result.
+          li <strong>Optional</strong> itself should never be null!
+          li Do not use <strong>Optional</strong>s as arguments of the method.
+
+      section
+        h1 Arguments
+        ul.build.build-items
+          li Avoid nullable arguments <strong>as much as you can</strong>!
+
+      section
+        h1 Arguments of Spring Beans methods
+        p Use annotations <strong>@NotNull</strong> and <strong>@Validated</strong>.
+        pre
+          code.language-java.
+            @Component
+            @Validated
+            public class ValidatingComponent {
+                public int validateNotNull(@NotNull String data) {
+                    return data.length();
+                }
+            }
+
+      section
+        h1 Arguments
+        p Use annotation <strong>@Nullable</strong> processed by IDE.
+        
+      section
+        h1 Arguments
+        p Multiple overloading methods.
+        font(size="-2")
+          pre
+            code.language-java.
+              public void method(Object mandatoryArgument) {
+                methodInternal(mandatoryArgument, null, null);
+              }
+              
+              public void method(Object mandatoryArgument, Object mandatoryToto) {
+                methodInternal(mandatoryArgument, mandatoryToto, null);
+              }
+              
+              public void method(Object mandatoryArgument, Object mandatoryToto, Object mandatoryTiti) {
+                methodInternal(mandatoryArgument, mandatoryToto, mandatoryTiti);
+              }
+              
+              private void methodInternal(Object mandatoryArgument, @Nullable Object toto, @Nullable Object titi) {
+              }
+
+      section
+        h1 Thank you
 
     script(src='build/build.js')
