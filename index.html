@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Null handling in Java (Geopost)</title>
+    <link rel="stylesheet" type="text/css" href="build/build.css">
+  </head>
+  <body>
+    <article class="deck">
+      <section>
+        <h1>Null handling in Java (Geopost)</h1>
+      </section>
+      <section>
+        <h1>"Billion dollars mistake"</h1>
+        <h3>Tony Hoare</h3>
+      </section>
+      <section>
+        <p>Make code prone to <em>NullPointerException</em>s <strong>by design</strong>.</p>
+      </section>
+      <section>
+        <h1>Two rules:</h1>
+        <ul class="build build-items">
+          <li><strong>Do not pass null</strong></li>
+          <li><strong>Do not return null</strong></li>
+        </ul>
+      </section>
+      <section>
+        <h1>Collections</h1>
+      </section>
+      <section>
+        <h1>Collections</h1>
+        <p>Collections should <strong>never</strong> be <em>null</em>!</p>
+        <pre><code class="language-java">List< Object > myList = Collections.emptyList();
+Set< Object > mySet = Collections.emptySet();
+Map< Object, Object > myMap = Collections.emptyMap();
+</code></pre>
+      </section>
+      <section>
+        <h1>Collections in entities</h1>
+        <p>Use <strong>@Builder.Default</strong> of Lombok</p>
+        <pre><code class="language-java">@Builder
+public class ParcelShopRestrictions {
+
+  @Builder.Default
+  private Set< String > blacklistedParcelShopIds = Collections.emptySet();
+
+  @Builder.Default
+  private Set< Integer > blacklistedPudoTypes = Collections.emptySet();
+
+  @Builder.Default
+  private Set< String > blacklistedPudoServices = Collections.emptySet();
+}
+</code></pre>
+      </section>
+      <section>
+        <h1>Optional</h1>
+      </section>
+      <section>
+        <h1>Rules of using Optionals</h1>
+        <ul class="build build-items">
+          <li>Always return <strong>Optional</strong> from the methods that may return no result.</li>
+          <li><strong>Optional</strong> itself should never be null!</li>
+          <li>Do not use <strong>Optional</strong>s as arguments of the method.</li>
+        </ul>
+      </section>
+      <section>
+        <h1>Arguments</h1>
+        <ul class="build build-items">
+          <li>Avoid nullable arguments <strong>as much as you can</strong>!</li>
+        </ul>
+      </section>
+      <section>
+        <h1>Arguments of Spring Beans methods</h1>
+        <p>Use annotations <strong>@NotNull</strong> and <strong>@Validated</strong>.</p>
+        <pre><code class="language-java">@Component
+@Validated
+public class ValidatingComponent {
+    public int validateNotNull(@NotNull String data) {
+        return data.length();
+    }
+}
+</code></pre>
+      </section>
+      <section>
+        <h1>Arguments</h1>
+        <p>Use annotation <strong>@Nullable</strong> processed by IDE.</p>
+      </section>
+      <section>
+        <h1>Arguments</h1>
+        <p>Multiple overloading methods.</p><font size="-2">
+          <pre><code class="language-java">public void method(Object mandatoryArgument) {
+  methodInternal(mandatoryArgument, null, null);
+}
+
+public void method(Object mandatoryArgument, Object mandatoryToto) {
+  methodInternal(mandatoryArgument, mandatoryToto, null);
+}
+
+public void method(Object mandatoryArgument, Object mandatoryToto, Object mandatoryTiti) {
+  methodInternal(mandatoryArgument, mandatoryToto, mandatoryTiti);
+}
+
+private void methodInternal(Object mandatoryArgument, @Nullable Object toto, @Nullable Object titi) {
+}
+</code></pre></font>
+      </section>
+      <section>
+        <h1>Thank you</h1>
+      </section>
+    </article>
+    <script src="build/build.js"></script>
+  </body>
+</html>
